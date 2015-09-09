@@ -23,9 +23,17 @@ if(DEBUG){
     ini_set("display_errors", 1);
 }
 
+/* MODX
+------------------------------------------------------------------- */
 /** @var modX $modx */
 defined('MODX_API_MODE') or define('MODX_API_MODE', true);
 require('../../../index.php');
+
+/* CONFIG
+------------------------------------------------------------------- */
+require_once('../../core/config/api.private.config.php');
+require_once(API_CORE_PATH.'/class/restful/restful.class.php');
+
 print $modx->getOption('site_name');
 die;
 
