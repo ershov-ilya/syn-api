@@ -38,6 +38,7 @@ require_once(API_CORE_PATH.'/class/format/format.class.php');
 
 try {
     $user_id = $modx->user->id;
+    $rest=new RESTful('get-sections',array('parent'));
 
     $json='[]';
     $q = $modx->newQuery('modResource');
@@ -45,9 +46,18 @@ try {
     $q->where(array('modResource.parent' => $parent));
     if ($q->prepare() && $q->stmt->execute()) {
         $rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($rows)) $response=$rows;
+        if(!empty($rows)) $response=array('sections'=>$rows);
     }
-    if(DEBUG) print_r($rows);
+
+    if(DEBUG) {
+        print_r($rows);
+        var_dump($rest->get('scope'));
+    }
+
+    if(!empty($rest->data['parent'])){
+        $response['course']=array();
+    }
+
 }
 catch(Exception $e){
     $response['message']=$e->getMessage();

@@ -29,7 +29,21 @@ var FilteredList = React.createClass({
         this.setState({items: this.state.initialItems})
     },
 
-    filterList: function(event){
+    componentDidMount: function() {
+     $.get('http://synergy.ru/api/ajax/filter/get-sections/', function(response) {
+        console.log(response);
+
+     /*
+         if (this.isMounted()) {
+             this.setState({
+                 items: response
+             });
+         }
+         */
+     }.bind(this));
+    },
+
+   filterList: function(event){
         var updatedList = this.state.initialItems;
         updatedList = updatedList.filter(function(item){
             return item.toLowerCase().search(
@@ -63,10 +77,35 @@ var List = React.createClass({
 });
 
 if(typeof FilteredList != 'undefined') {
-    React.render(
-        React.createElement(FilteredList, {}),
-        document.getElementById('FilteredListApp')
-    );
+    React.render(<FilteredList/>, document.getElementById('FilteredListApp'));
 }
 
-// React.render(<FilteredList/>, document.getElementById('mount-point'));
+/*
+    <!-- Filter -->
+    <section class="filter clearfix">
+        <div class="filter-left">
+            <div class="themes-title">Фильтры</div>
+            <div class="drop-filter themes-filter">
+                <a href="#" class="drop-link">Раздел</a>
+                <ul>
+                    <li><a href="" data-option="0">Раздел</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="filter-right">
+            <span class="sorting-filter-title">сортировать</span>
+            <ul class="sorting-filter">
+                <li><a href="" data-option="publishedon">по дате</a></li>
+                <li><a href="" data-option="speaker">по автору</a></li>
+
+                <li><a href="" data-option="view_count">по популярности</a></li>
+            </ul>
+            <ul class="view-filter">
+                <li><a href="" class="rows current"></a></li>
+                <li><a href="" class="column"></a></li>
+            </ul>
+        </div>
+    </section>
+    <!-- /Filter -->
+
+*/
