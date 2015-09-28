@@ -17,6 +17,7 @@ if(isset($_REQUEST['t'])) define('DEBUG', true);
 defined('DEBUG') or define('DEBUG', false);
 $response=array();
 $format='json';
+$parent=9573;
 
 if(DEBUG){
     error_reporting(E_ALL);
@@ -41,7 +42,7 @@ try {
     $json='[]';
     $q = $modx->newQuery('modResource');
     $q->select('id,pagetitle,alias,uri');
-    $q->where(array('modResource.parent' => 9573));
+    $q->where(array('modResource.parent' => $parent));
     if ($q->prepare() && $q->stmt->execute()) {
         $rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
         if(!empty($rows)) $response=$rows;
