@@ -27,11 +27,11 @@ if(DEBUG){
 ------------------------------------------------------------------- */
 /** @var modX $modx */
 defined('MODX_API_MODE') or define('MODX_API_MODE', true);
-require('../../../index.php');
+require('../../../../index.php');
 
 /* CONFIG
 ------------------------------------------------------------------- */
-require_once('../../core/config/api.private.config.php');
+require_once('../../../core/config/api.private.config.php');
 require_once(API_CORE_PATH.'/class/restful/restful.class.php');
 require_once(API_CORE_PATH.'/class/format/format.class.php');
 
