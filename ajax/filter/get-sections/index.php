@@ -51,7 +51,7 @@ try {
 
     if(DEBUG) {
         print_r($rows);
-        var_dump($rest->get('scope'));
+        var_dump($rest->data);
     }
 
     if(!empty($rest->data['parent'])){
