@@ -34,7 +34,7 @@ var FilteredList = React.createClass({
                         items: response
                     });
                 }
-                */
+            */
         }).bind(this));
     },
 
