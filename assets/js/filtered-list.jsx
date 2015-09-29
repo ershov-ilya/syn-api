@@ -11,6 +11,10 @@
 var FilteredList = React.createClass({
     getInitialState: function(){
         return {
+            filters:{
+                sections:[],
+                course:[]
+            },
             initialItems: [
                 "Apples",
                 "Broccoli",
@@ -25,34 +29,95 @@ var FilteredList = React.createClass({
         }
     },
 
-    componentWillMount: function(){
+    componentWillMount: function(){ // Функция инциализации
         this.setState({items: this.state.initialItems})
     },
 
     componentDidMount: function() {
-     $.get('http://synergy.ru/api/ajax/filter/get-sections/', function(response) {
-        console.log(response);
-
-     /*
+     $.get('http://synergy.ru/api/ajax/filter/get-sections/', function(response) { //?course=9574
+        response=JSON.parse(response);
          if (this.isMounted()) {
              this.setState({
-                 items: response
+                 filters: response
              });
          }
-     */
      }.bind(this));
+
+     // Открытие закрытие списка
+     	$('#FilteredListApp').on('click', '.drop-link', function(e){
+     	    var $this=$(e.target);
+     	    var state=$this.data('open-state');
+     		if(!state){
+     		   $this.parents(".drop-filter").find("UL").fadeIn('fast');
+     		   $this.data('open-state',1);
+     		}
+     		else{
+     		   $this.parents(".drop-filter").find("UL").fadeOut('fast');
+     		   $this.data('open-state',0);
+     		}
+     		state = !state;
+     	   return false;
+     	});
+
+     	$('#FilteredListApp').on('click', '.drop-list a', this.handleClick.bind(this));
     },
+
+     handleClick: function(e) {
+        e.preventDefault();
+        alert('clicked');
+        // Ajax details ommitted since we never get here via onClick
+        //         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course=9574', function(response) {
+        //            response=JSON.parse(response);
+        //             if (this.isMounted()) {
+        //                 this.setState({
+        //                     filters: response
+        //                 });
+        //             }
+        //         }.bind(this));
+
+      },
 
     render: function(){
         console.log('Render event');
+        console.log(this.state.filters);
         return (
+            <section className="filter clearfix">
+                <div className="filter-left">
+                    <div className="themes-title">Фильтры</div>
+                    <div className="drop-filter themes-filter">
+                        <a href="#" className="drop-link">Раздел</a>
+                        <ul className="drop-list">
+                            <li><a href="" data-option="0">Раздел</a></li>
+                            {
+                                this.state.filters.sections.map(function(item) {
+                                    return <li><a href="" data-option={item.id} onClick={this.handleClick}>{item.pagetitle}</a></li>
+                                })
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div className="filter-right">
+                    <span className="sorting-filter-title">сортировать</span>
+                    <ul className="sorting-filter">
+                        <li><a href="" data-option="publishedon">по дате</a></li>
+                        <li><a href="" data-option="speaker">по автору</a></li>
+
+                        <li><a href="" data-option="view_count">по популярности</a></li>
+                    </ul>
+                    <ul className="view-filter">
+                        <li><a href="" className="rows current"></a></li>
+                        <li><a href="" className="column"></a></li>
+                    </ul>
+                </div>
+            </section>
+        );
+    },
+    /*
             <div className="filter-list">
                 <input type="text" placeholder="Search" onChange={this.filterList}/>
                 <List items={this.state.items}/>
             </div>
-        );
-    },
-
+    */
     // Custom functions
     filterList: function(event){
          var updatedList = this.state.initialItems;
@@ -61,6 +126,23 @@ var FilteredList = React.createClass({
                      event.target.value.toLowerCase()) !== -1;
          });
          this.setState({items: updatedList});
+     },
+
+     FilterClick: function(e){
+        alert('!!!');
+         e.preventDefault();
+         e.stopPropagation();
+         e.nativeEvent.stopImmediatePropagation();
+         console.log('function FilterClick');
+//         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course=9574', function(response) {
+//            response=JSON.parse(response);
+//             if (this.isMounted()) {
+//                 this.setState({
+//                     filters: response
+//                 });
+//             }
+//         }.bind(this));
+         return false;
      }
 });
 
@@ -113,3 +195,4 @@ if(typeof FilteredList != 'undefined') {
     <!-- /Filter -->
 
 */
+

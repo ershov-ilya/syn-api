@@ -15,37 +15,43 @@ var FilteredList = React.createClass({
 
     getInitialState: function getInitialState() {
         return {
+            filters: {},
             initialItems: ["Apples", "Broccoli", "Chicken", "Duck", "Eggs", "Fish", "Granola", "Hash Browns"],
             items: []
         };
     },
 
     componentWillMount: function componentWillMount() {
+        // Функция инциализации
         this.setState({ items: this.state.initialItems });
     },
 
     componentDidMount: function componentDidMount() {
-        $.get('http://synergy.ru/api/ajax/filter/get-sections/', (function (response) {
-            console.log(response);
-
-            /*
-                if (this.isMounted()) {
-                    this.setState({
-                        items: response
-                    });
-                }
-            */
+        $.get('http://synergy.ru/api/ajax/filter/get-sections/?course=9574', (function (response) {
+            response = JSON.parse(response);
+            if (this.isMounted()) {
+                this.setState({
+                    filters: response
+                });
+            }
         }).bind(this));
     },
 
     render: function render() {
         console.log('Render event');
+        console.log(this.state.filters);
+        this.Show();
         return React.createElement(
             "div",
             { className: "filter-list" },
             React.createElement("input", { type: "text", placeholder: "Search", onChange: this.filterList }),
             React.createElement(List, { items: this.state.items })
         );
+    },
+
+    Show: function Show() {
+        console.log('Show function');
+        console.log(this.state);
     },
 
     // Custom functions
