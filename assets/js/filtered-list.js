@@ -38,13 +38,6 @@ var FilteredList = React.createClass({
         }).bind(this));
     },
 
-    filterList: function filterList(event) {
-        var updatedList = this.state.initialItems;
-        updatedList = updatedList.filter(function (item) {
-            return item.toLowerCase().search(event.target.value.toLowerCase()) !== -1;
-        });
-        this.setState({ items: updatedList });
-    },
     render: function render() {
         console.log('Render event');
         return React.createElement(
@@ -53,6 +46,15 @@ var FilteredList = React.createClass({
             React.createElement("input", { type: "text", placeholder: "Search", onChange: this.filterList }),
             React.createElement(List, { items: this.state.items })
         );
+    },
+
+    // Custom functions
+    filterList: function filterList(event) {
+        var updatedList = this.state.initialItems;
+        updatedList = updatedList.filter(function (item) {
+            return item.toLowerCase().search(event.target.value.toLowerCase()) !== -1;
+        });
+        this.setState({ items: updatedList });
     }
 });
 

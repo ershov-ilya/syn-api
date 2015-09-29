@@ -43,14 +43,6 @@ var FilteredList = React.createClass({
      }.bind(this));
     },
 
-   filterList: function(event){
-        var updatedList = this.state.initialItems;
-        updatedList = updatedList.filter(function(item){
-            return item.toLowerCase().search(
-                    event.target.value.toLowerCase()) !== -1;
-        });
-        this.setState({items: updatedList});
-    },
     render: function(){
         console.log('Render event');
         return (
@@ -59,8 +51,20 @@ var FilteredList = React.createClass({
                 <List items={this.state.items}/>
             </div>
         );
-    }
+    },
+
+    // Custom functions
+    filterList: function(event){
+         var updatedList = this.state.initialItems;
+         updatedList = updatedList.filter(function(item){
+             return item.toLowerCase().search(
+                     event.target.value.toLowerCase()) !== -1;
+         });
+         this.setState({items: updatedList});
+     }
 });
+
+
 
 var List = React.createClass({
     render: function(){
