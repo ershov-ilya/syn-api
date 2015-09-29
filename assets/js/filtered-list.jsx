@@ -12,7 +12,7 @@ function closeFilters(){
 }
 
 var FilteredList = React.createClass({
-    DEBUG: true,
+    DEBUG: false,
 
     handleFilterOpenClose: function(e){
      	    var $this=$(e.target);
@@ -171,7 +171,7 @@ var FilteredList = React.createClass({
                 </section>
                 <p>Запрос: {JSON.stringify(this.state.query)}</p>
                 <section className="filter-content">
-                    <List />
+                    <List course={this.state.query.id || 0} />
                 </section>
             </div>
         );
@@ -183,7 +183,7 @@ var FilteredList = React.createClass({
 var List = React.createClass({
     DEBUG: true,
 
-    render: function(){
+    getInitialState: function(){
         var content=(
                 <section className="item-list itemblock-h clearfix ajax-page-content">
                     <div className="itemblock">
@@ -223,7 +223,21 @@ var List = React.createClass({
                 </section>
          );
 
-        return content;
+        return {
+            content:content,
+            url:'http://synergy.ru/api/ajax/filter/get-course-html/?course=',
+            course:0
+        }
+    },
+    render: function(){
+        if(this.DEBUG) {
+            console.log('Render event');
+            console.log('props:');
+            console.log(this.props);
+//            console.log('state:');
+//            console.log(this.state);
+        }
+        return this.state.content;
     }
 });
 
