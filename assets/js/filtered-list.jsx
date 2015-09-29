@@ -7,7 +7,7 @@
  * Date: 09.09.2015
  * Time: 13:28
  */
-function closedata(){
+function closequery(){
     $(".drop-filter ul").fadeOut('fast').data('open-state',0);
 }
 
@@ -31,34 +31,58 @@ var FilteredList = React.createClass({
 
      handleSectionClick: function(e) {
         e.preventDefault();
-        var $target=$(e.target);
-        var option=$target.data('option');
+        var $target=$(e.target),
+        section;
 
-        console.log('option');
-        console.log(option);
-        // Ajax details ommitted since we never get here via onClick
-         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course='+option, function(response) {
+        console.log($target.get(0));
+        section={
+            id: $target.data('option'),
+            name: $target.text()
+        };
+
+        console.log('section');
+        console.log(section);
+
+        var state=this.state;
+
+
+         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course='+section.id, function(response) {
             response=JSON.parse(response);
              if (this.isMounted()) {
                  this.setState({
-                     data: response
+                     filters: response
                  });
              }
+             closequery();
          }.bind(this));
 
       },
 
-     handleCourseClick: function(e) {
+    handleCourseClick: function(e) {
         e.preventDefault();
-        console.log('course click');
-      },
+        var $target=$(e.target);
+        var courseId=$target.data('course-id');
 
+        console.log($target.get(0));
+        console.log(courseId);
+        //        closequery();
+    },
 
     getInitialState: function(){
         return {
-            data:{
+            filters:{
                 sections:[],
                 course:[]
+            },
+            query:{
+                section:{
+                    id:0,
+                    name:'Раздел'
+                },
+                course:{
+                    id:0,
+                    name:'Курс'
+                }
             }
         }
     },
@@ -75,7 +99,7 @@ var FilteredList = React.createClass({
 
              if (this.isMounted()) {
                  this.setState({
-                     data: response
+                     filters: response
                  });
              }
          }.bind(this));
@@ -90,39 +114,50 @@ var FilteredList = React.createClass({
     render: function(){
         if(this.DEBUG) {
             console.log('Render event');
-            console.log(this.state.data);
+            console.log('Current filters:');
+            console.log(this.state.filters);
         }
 
         return (
-            <section className="filter clearfix">
-                <div className="filter-left">
-                    <div className="themes-title">Фильтры</div>
-                    <div className="drop-filter themes-filter section-filter">
-                        <a href="#" className="drop-link">Раздел</a>
-                        <ul className="drop-list">
-                            <li><a href="" data-option="0">Раздел</a></li>
-                            {
-                                this.state.data.sections.map(function(item) {
-                                    return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
-                                })
-                            }
-                        </ul>
+            <div>
+                <section className="filter clearfix">
+                    <div className="filter-left">
+                        <div className="themes-title">Фильтры</div>
+                        <div className="drop-filter themes-filter section-filter">
+                            <a href="#" className="drop-link">Раздел</a>
+                            <ul className="drop-list">
+                                <li><a href="" data-option="0">Раздел</a></li>
+                                {
+                                    this.state.filters.sections.map(function(item) {
+                                        return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
+                                    })
+                                }
+                            </ul>
+                        </div>
+                        <div className="drop-filter themes-filter course-filter">
+                            <a href="#" className="drop-link">Курс</a>
+                            <ul className="drop-list">
+                                <li><a href="" data-option="0">Курс</a></li>
+                                {
+                                    this.state.filters.course.map(function(item) {
+                                        return <li><a href="" data-course-id={item.id}>{item.pagetitle}</a></li>
+                                    })
+                                }
+                            </ul>
+                        </div>
                     </div>
-                    <div className="drop-filter themes-filter course-filter">
-                        <a href="#" className="drop-link">Курс</a>
-                        <ul className="drop-list">
-                            <li><a href="" data-option="0">Курс</a></li>
-                            {
-                                this.state.data.course.map(function(item) {
-                                    return <li><a href="" data-course-id={item.id}>{item.pagetitle}</a></li>
-                                })
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </section>
+                </section>
+                <p>Запрос: {JSON.stringify(this.state.query)}</p>
+            </div>
         );
     },
+
+    ajaxRequest: function(){
+        console.log('filtered ajaxRequest event');
+        console.log(this.state.query);
+    }
+
+
     /*
             <div className="filter-list">
                 <input type="text" placeholder="Search" onChange={this.filterList}/>
