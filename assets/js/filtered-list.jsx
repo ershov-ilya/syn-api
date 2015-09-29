@@ -44,13 +44,19 @@ var FilteredList = React.createClass({
         console.log(section);
 
         this.state.query.section=section;
+        if(this.state.query.section.id==0) {
+            this.state.filters.course=[];
+            this.state.query.course={id:0, name:'Курс'};
+        }
         this.setState(this.state);
 
          $.get('http://synergy.ru/api/ajax/filter/get-sections/?course='+section.id, function(response) {
             response=JSON.parse(response);
              if (this.isMounted()) {
+                if(typeof response.sections != 'undefined') this.state.filters.sections=response.sections;
+                if(typeof response.course != 'undefined') this.state.filters.course=response.course;
                  this.setState({
-                     filters: response
+                    filters: this.state.filters
                  });
              }
          }.bind(this));
@@ -65,7 +71,7 @@ var FilteredList = React.createClass({
 
         console.log($target.get(0));
         course={
-            id: $target.data('course-id'),
+            id: $target.data('option'),
             name: $target.text()
         };
 
@@ -127,13 +133,18 @@ var FilteredList = React.createClass({
             console.log(this.state.filters);
         }
 
+        var showSub=(this.state.filters.course.length)?true:false;
+        var subFilterStyle={
+            display:(showSub)?'block':'none'
+        };
+
         return (
             <div>
                 <section className="filter clearfix">
                     <div className="filter-left">
                         <div className="themes-title">Фильтры</div>
                         <div className="drop-filter themes-filter section-filter">
-                            <a href="#" className="drop-link">Раздел</a>
+                            <a href="#" className="drop-link">{this.state.query.section.name}</a>
                             <ul className="drop-list">
                                 <li><a href="" data-option="0">Раздел</a></li>
                                 {
@@ -143,13 +154,13 @@ var FilteredList = React.createClass({
                                 }
                             </ul>
                         </div>
-                        <div className="drop-filter themes-filter course-filter">
-                            <a href="#" className="drop-link">Курс</a>
+                        <div className="drop-filter themes-filter course-filter" style={subFilterStyle}>
+                            <a href="#" className="drop-link">{this.state.query.course.name}</a>
                             <ul className="drop-list">
                                 <li><a href="" data-option="0">Курс</a></li>
                                 {
                                     this.state.filters.course.map(function(item) {
-                                        return <li><a href="" data-course-id={item.id}>{item.pagetitle}</a></li>
+                                        return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
                                     })
                                 }
                             </ul>
