@@ -48,18 +48,20 @@ try {
 
     // Значения о умолчанию
     $props = array(
-        'parents'=>9578,
+        'parents'=>$rest->data['course'],
         'depth' => 1,
         'tpl' => 'bz.video-list.item.tpl',
 //        'where' => "template IN ('41') AND published='1'",
         'limit' => 50,
         "includeTVs" => 'img,speaker,view_count',
+        "processTVs" => 1,
         'sortby' => 'menuindex',
-        'sortdir' => 'ASC'
+        'sortdir' => 'ASC',
+//        'fastMode'=>1
     );
     $output= $modx->runSnippet('pdoResources', $props);
-    $modx->getParser()->processElementTags('', $output, false, false, '[[', ']]', array(), 10);
-    $modx->getParser()->processElementTags('', $output, true, true, '[[', ']]', array(), 10);
+//    $modx->getParser()->processElementTags('', $output, false, false, '[[', ']]', array(), 10);
+//    $modx->getParser()->processElementTags('', $output, true, true, '[[', ']]', array(), 10);
     print $output;
     die;
 }

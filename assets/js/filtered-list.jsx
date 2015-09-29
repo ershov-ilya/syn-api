@@ -171,7 +171,7 @@ var FilteredList = React.createClass({
                 </section>
                 <p>Запрос: {JSON.stringify(this.state.query)}</p>
                 <section className="filter-content">
-                    <List course={this.state.query.id || 0} />
+                    <List course={this.state.query.course.id || 0} name={this.state.query.course.name || ''} />
                 </section>
             </div>
         );
@@ -184,60 +184,52 @@ var List = React.createClass({
     DEBUG: true,
 
     getInitialState: function(){
-        var content=(
-                <section className="item-list itemblock-h clearfix ajax-page-content">
-                    <div className="itemblock">
-                        <div className="infoblock">
-
-                            <a href="base/sections/informatika/kurs_po_veb_razrabotke/">
-                                <img src="assets/upload/BZ/informatika/kurs_web_razrab/Screenshot_3.png" width="294" height="204" alt="" />
-                            </a>
-                            <div className="infoblock-panel">
-                                <a href="base/sections/informatika/kurs_po_veb_razrabotke/" className="play-icon">Видео</a>
-                                <span className="browsing-icon">51</span>
-
-                            </div>
-                        </div>
-                        <div className="itemblock-title">
-
-                            <a href="base/sections/informatika/" className="rubric">Информатика</a>
-
-                            <span className="date"></span>
-                        </div>
-                        <div className="itemblock-extrainfo">
-                            <h4>
-                                <a href="base/sections/informatika/kurs_po_veb_razrabotke/">Курс по веб-разработке</a>
-
-                            </h4>
-                            <ul className="video-info">
-
-                            </ul>
-
-
-
-                        </div>
-                        <div className="lecturer-wrap">
-
-                        </div>
-                    </div>
-                </section>
-         );
-
         return {
-            content:content,
-            url:'http://synergy.ru/api/ajax/filter/get-course-html/?course=',
+            content:'',
+            url:'http://synergy.ru/api/ajax/filter/get-course-html/',
             course:0
         }
     },
+
+    componentWillMount: function(){ // Функция инциализации
+        //this.setState({items: this.state.initialItems})
+    },
+
+    componentDidMount: function() {
+         $('#FilteredContent').hide();
+   },
+
+    componentDidUpdate: function(){
+        if(this.DEBUG) console.log('componentDidUpdate event');
+        if(this.DEBUG) {
+            console.log('>>> props:');
+            console.log(this.props);
+        }
+        if(typeof this.props.course != 'undefined' && this.props.course>0 && this.props.course!=this.state.course){
+            this.setState({course: this.props.course});
+            console.log('Ajax request for content');
+            $.get(this.state.url+'?course='+this.props.course, function(response) { //?course=9574
+//                console.log(response);
+                $('#FilteredContent').fadeOut(300).html(response).fadeIn(300);
+            }.bind(this));
+        }
+    },
+
+    componentWillReceiveProps: function(){
+        if(this.DEBUG) console.log('componentWillReceiveProps event');
+    },
+
+
     render: function(){
         if(this.DEBUG) {
             console.log('Render event');
-            console.log('props:');
-            console.log(this.props);
+//            console.log('props:');
+//            console.log(this.props);
+
 //            console.log('state:');
 //            console.log(this.state);
         }
-        return this.state.content;
+        return <p>&nbsp;</p>;
     }
 });
 
