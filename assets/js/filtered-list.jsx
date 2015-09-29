@@ -7,9 +7,14 @@
  * Date: 09.09.2015
  * Time: 13:28
  */
+function closedata(){
+    $(".drop-filter ul").fadeOut('fast').data('open-state',0);
+}
 
 var FilteredList = React.createClass({
     DEBUG: true,
+
+
 
     handleFilterOpenClose: function(e){
      	    var $this=$(e.target);
@@ -36,7 +41,7 @@ var FilteredList = React.createClass({
             response=JSON.parse(response);
              if (this.isMounted()) {
                  this.setState({
-                     filters: response
+                     data: response
                  });
              }
          }.bind(this));
@@ -51,26 +56,15 @@ var FilteredList = React.createClass({
 
     getInitialState: function(){
         return {
-            filters:{
+            data:{
                 sections:[],
                 course:[]
-            },
-            initialItems: [
-                "Apples",
-                "Broccoli",
-                "Chicken",
-                "Duck",
-                "Eggs",
-                "Fish",
-                "Granola",
-                "Hash Browns"
-            ],
-            items: []
+            }
         }
     },
 
     componentWillMount: function(){ // Функция инциализации
-        this.setState({items: this.state.initialItems})
+        //this.setState({items: this.state.initialItems})
     },
 
     componentDidMount: function() {
@@ -81,7 +75,7 @@ var FilteredList = React.createClass({
 
              if (this.isMounted()) {
                  this.setState({
-                     filters: response
+                     data: response
                  });
              }
          }.bind(this));
@@ -96,7 +90,7 @@ var FilteredList = React.createClass({
     render: function(){
         if(this.DEBUG) {
             console.log('Render event');
-            console.log(this.state.filters);
+            console.log(this.state.data);
         }
 
         return (
@@ -108,7 +102,7 @@ var FilteredList = React.createClass({
                         <ul className="drop-list">
                             <li><a href="" data-option="0">Раздел</a></li>
                             {
-                                this.state.filters.sections.map(function(item) {
+                                this.state.data.sections.map(function(item) {
                                     return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
                                 })
                             }
@@ -119,8 +113,8 @@ var FilteredList = React.createClass({
                         <ul className="drop-list">
                             <li><a href="" data-option="0">Курс</a></li>
                             {
-                                this.state.filters.course.map(function(item) {
-                                    return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
+                                this.state.data.course.map(function(item) {
+                                    return <li><a href="" data-course-id={item.id}>{item.pagetitle}</a></li>
                                 })
                             }
                         </ul>
@@ -136,14 +130,6 @@ var FilteredList = React.createClass({
             </div>
     */
     // Custom functions
-    filterList: function(event){
-         var updatedList = this.state.initialItems;
-         updatedList = updatedList.filter(function(item){
-             return item.toLowerCase().search(
-                     event.target.value.toLowerCase()) !== -1;
-         });
-         this.setState({items: updatedList});
-     },
 });
 
 
