@@ -7,7 +7,7 @@
  * Date: 09.09.2015
  * Time: 13:28
  */
-function closequery(){
+function closeFilters(){
     $(".drop-filter ul").fadeOut('fast').data('open-state',0);
 }
 
@@ -43,8 +43,8 @@ var FilteredList = React.createClass({
         console.log('section');
         console.log(section);
 
-        var state=this.state;
-
+        this.state.query.section=section;
+        this.setState(this.state);
 
          $.get('http://synergy.ru/api/ajax/filter/get-sections/?course='+section.id, function(response) {
             response=JSON.parse(response);
@@ -53,9 +53,9 @@ var FilteredList = React.createClass({
                      filters: response
                  });
              }
-             closequery();
          }.bind(this));
 
+        closeFilters();
       },
 
     handleCourseClick: function(e) {
@@ -64,8 +64,17 @@ var FilteredList = React.createClass({
         var courseId=$target.data('course-id');
 
         console.log($target.get(0));
-        console.log(courseId);
-        //        closequery();
+        course={
+            id: $target.data('course-id'),
+            name: $target.text()
+        };
+
+        console.log('course');
+        console.log(course);
+
+        this.state.query.course=course;
+        this.setState(this.state);
+        closeFilters();
     },
 
     getInitialState: function(){
