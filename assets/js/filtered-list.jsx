@@ -9,29 +9,30 @@
  */
 
 var FilteredList = React.createClass({
+    DEBUG: true,
+
     handleFilterOpenClose: function(e){
      	    var $this=$(e.target);
      	    var state=$this.data('open-state');
      		if(!state){
-     		   $this.parents(".drop-filter").find("UL").fadeIn('fast');
-     		   $this.data('open-state',1);
+     		   $this.parents(".drop-filter").find("UL").fadeIn('fast').data('open-state',1);
      		}
      		else{
-     		   $this.parents(".drop-filter").find("UL").fadeOut('fast');
-     		   $this.data('open-state',0);
+     		   $this.parents(".drop-filter").find("UL").fadeOut('fast').data('open-state',0);
      		}
      		state = !state;
      	   return false;
     },
 
-     handleClick: function(e) {
+     handleSectionClick: function(e) {
         e.preventDefault();
+        var $target=$(e.target);
+        var option=$target.data('option');
 
-        var option=
-        console.log('target');
-        console.log($(e.target).get(0));
+        console.log('option');
+        console.log(option);
         // Ajax details ommitted since we never get here via onClick
-         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course=9574', function(response) {
+         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course='+option, function(response) {
             response=JSON.parse(response);
              if (this.isMounted()) {
                  this.setState({
@@ -40,6 +41,11 @@ var FilteredList = React.createClass({
              }
          }.bind(this));
 
+      },
+
+     handleCourseClick: function(e) {
+        e.preventDefault();
+        console.log('course click');
       },
 
 
@@ -70,6 +76,9 @@ var FilteredList = React.createClass({
     componentDidMount: function() {
          $.get('http://synergy.ru/api/ajax/filter/get-sections/', function(response) { //?course=9574
             response=JSON.parse(response);
+            if(typeof response.sections == 'undefined') response.sections = [];
+            if(typeof response.course == 'undefined') response.course = [];
+
              if (this.isMounted()) {
                  this.setState({
                      filters: response
@@ -79,41 +88,43 @@ var FilteredList = React.createClass({
 
         // Обработка событий
         $('#FilteredListApp').on('click', '.drop-link', this.handleFilterOpenClose);
-        $('#FilteredListApp').on('click', '.drop-list a', this.handleClick.bind(this));
+        $('#FilteredListApp').on('click', '.section-filter ul a', this.handleSectionClick.bind(this));
+        $('#FilteredListApp').on('click', '.course-filter ul a', this.handleCourseClick.bind(this));
     },
 
 
     render: function(){
-        console.log('Render event');
-        console.log(this.state.filters);
+        if(this.DEBUG) {
+            console.log('Render event');
+            console.log(this.state.filters);
+        }
+
         return (
             <section className="filter clearfix">
                 <div className="filter-left">
                     <div className="themes-title">Фильтры</div>
-                    <div className="drop-filter themes-filter">
+                    <div className="drop-filter themes-filter section-filter">
                         <a href="#" className="drop-link">Раздел</a>
                         <ul className="drop-list">
                             <li><a href="" data-option="0">Раздел</a></li>
                             {
                                 this.state.filters.sections.map(function(item) {
-                                    return <li><a href="" data-option={item.id} onClick={this.handleClick}>{item.pagetitle}</a></li>
+                                    return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
                                 })
                             }
                         </ul>
                     </div>
-                </div>
-                <div className="filter-right">
-                    <span className="sorting-filter-title">сортировать</span>
-                    <ul className="sorting-filter">
-                        <li><a href="" data-option="publishedon">по дате</a></li>
-                        <li><a href="" data-option="speaker">по автору</a></li>
-
-                        <li><a href="" data-option="view_count">по популярности</a></li>
-                    </ul>
-                    <ul className="view-filter">
-                        <li><a href="" className="rows current"></a></li>
-                        <li><a href="" className="column"></a></li>
-                    </ul>
+                    <div className="drop-filter themes-filter course-filter">
+                        <a href="#" className="drop-link">Курс</a>
+                        <ul className="drop-list">
+                            <li><a href="" data-option="0">Курс</a></li>
+                            {
+                                this.state.filters.course.map(function(item) {
+                                    return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
+                                })
+                            }
+                        </ul>
+                    </div>
                 </div>
             </section>
         );
@@ -133,23 +144,6 @@ var FilteredList = React.createClass({
          });
          this.setState({items: updatedList});
      },
-
-     FilterClick: function(e){
-        alert('!!!');
-         e.preventDefault();
-         e.stopPropagation();
-         e.nativeEvent.stopImmediatePropagation();
-         console.log('function FilterClick');
-//         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course=9574', function(response) {
-//            response=JSON.parse(response);
-//             if (this.isMounted()) {
-//                 this.setState({
-//                     filters: response
-//                 });
-//             }
-//         }.bind(this));
-         return false;
-     }
 });
 
 
