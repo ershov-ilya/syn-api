@@ -9,6 +9,40 @@
  */
 
 var FilteredList = React.createClass({
+    handleFilterOpenClose: function(e){
+     	    var $this=$(e.target);
+     	    var state=$this.data('open-state');
+     		if(!state){
+     		   $this.parents(".drop-filter").find("UL").fadeIn('fast');
+     		   $this.data('open-state',1);
+     		}
+     		else{
+     		   $this.parents(".drop-filter").find("UL").fadeOut('fast');
+     		   $this.data('open-state',0);
+     		}
+     		state = !state;
+     	   return false;
+    },
+
+     handleClick: function(e) {
+        e.preventDefault();
+
+        var option=
+        console.log('target');
+        console.log($(e.target).get(0));
+        // Ajax details ommitted since we never get here via onClick
+         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course=9574', function(response) {
+            response=JSON.parse(response);
+             if (this.isMounted()) {
+                 this.setState({
+                     filters: response
+                 });
+             }
+         }.bind(this));
+
+      },
+
+
     getInitialState: function(){
         return {
             filters:{
@@ -34,48 +68,20 @@ var FilteredList = React.createClass({
     },
 
     componentDidMount: function() {
-     $.get('http://synergy.ru/api/ajax/filter/get-sections/', function(response) { //?course=9574
-        response=JSON.parse(response);
-         if (this.isMounted()) {
-             this.setState({
-                 filters: response
-             });
-         }
-     }.bind(this));
+         $.get('http://synergy.ru/api/ajax/filter/get-sections/', function(response) { //?course=9574
+            response=JSON.parse(response);
+             if (this.isMounted()) {
+                 this.setState({
+                     filters: response
+                 });
+             }
+         }.bind(this));
 
-     // Открытие закрытие списка
-     	$('#FilteredListApp').on('click', '.drop-link', function(e){
-     	    var $this=$(e.target);
-     	    var state=$this.data('open-state');
-     		if(!state){
-     		   $this.parents(".drop-filter").find("UL").fadeIn('fast');
-     		   $this.data('open-state',1);
-     		}
-     		else{
-     		   $this.parents(".drop-filter").find("UL").fadeOut('fast');
-     		   $this.data('open-state',0);
-     		}
-     		state = !state;
-     	   return false;
-     	});
-
-     	$('#FilteredListApp').on('click', '.drop-list a', this.handleClick.bind(this));
+        // Обработка событий
+        $('#FilteredListApp').on('click', '.drop-link', this.handleFilterOpenClose);
+        $('#FilteredListApp').on('click', '.drop-list a', this.handleClick.bind(this));
     },
 
-     handleClick: function(e) {
-        e.preventDefault();
-        alert('clicked');
-        // Ajax details ommitted since we never get here via onClick
-        //         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course=9574', function(response) {
-        //            response=JSON.parse(response);
-        //             if (this.isMounted()) {
-        //                 this.setState({
-        //                     filters: response
-        //                 });
-        //             }
-        //         }.bind(this));
-
-      },
 
     render: function(){
         console.log('Render event');
