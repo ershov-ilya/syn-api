@@ -14,8 +14,6 @@ function closeFilters(){
 var FilteredList = React.createClass({
     DEBUG: true,
 
-
-
     handleFilterOpenClose: function(e){
      	    var $this=$(e.target);
      	    var state=$this.data('open-state');
@@ -34,14 +32,14 @@ var FilteredList = React.createClass({
         var $target=$(e.target),
         section;
 
-        console.log($target.get(0));
+        if(this.DEBUG) console.log($target.get(0));
         section={
             id: $target.data('option'),
             name: $target.text()
         };
 
-        console.log('section');
-        console.log(section);
+        if(this.DEBUG) console.log('section');
+        if(this.DEBUG) console.log(section);
 
         this.state.query.section=section;
         if(this.state.query.section.id==0) {
@@ -69,14 +67,14 @@ var FilteredList = React.createClass({
         var $target=$(e.target);
         var courseId=$target.data('course-id');
 
-        console.log($target.get(0));
+        if(this.DEBUG) console.log($target.get(0));
         course={
             id: $target.data('option'),
             name: $target.text()
         };
 
-        console.log('course');
-        console.log(course);
+        if(this.DEBUG) console.log('course');
+        if(this.DEBUG) console.log(course);
 
         this.state.query.course=course;
         this.setState(this.state);
@@ -177,65 +175,53 @@ var FilteredList = React.createClass({
                 </section>
             </div>
         );
-    },
-
-    ajaxRequest: function(){
-        console.log('filtered ajaxRequest event');
-        console.log(this.state.query);
     }
-
-
-    /*
-            <div className="filter-list">
-                <input type="text" placeholder="Search" onChange={this.filterList}/>
-                <List items={this.state.items}/>
-            </div>
-    */
-    // Custom functions
 });
 
 
 
 var List = React.createClass({
-    render: function(){
-    var content=(
-            <section className="item-list itemblock-h clearfix ajax-page-content">
-                <div className="itemblock">
-                    <div className="infoblock">
+    DEBUG: true,
 
-                        <a href="base/sections/informatika/kurs_po_veb_razrabotke/">
-                            <img src="assets/upload/BZ/informatika/kurs_web_razrab/Screenshot_3.png" width="294" height="204" alt="" />
-                        </a>
-                        <div className="infoblock-panel">
-                            <a href="base/sections/informatika/kurs_po_veb_razrabotke/" className="play-icon">Видео</a>
-                            <span className="browsing-icon">51</span>
+    render: function(){
+        var content=(
+                <section className="item-list itemblock-h clearfix ajax-page-content">
+                    <div className="itemblock">
+                        <div className="infoblock">
+
+                            <a href="base/sections/informatika/kurs_po_veb_razrabotke/">
+                                <img src="assets/upload/BZ/informatika/kurs_web_razrab/Screenshot_3.png" width="294" height="204" alt="" />
+                            </a>
+                            <div className="infoblock-panel">
+                                <a href="base/sections/informatika/kurs_po_veb_razrabotke/" className="play-icon">Видео</a>
+                                <span className="browsing-icon">51</span>
+
+                            </div>
+                        </div>
+                        <div className="itemblock-title">
+
+                            <a href="base/sections/informatika/" className="rubric">Информатика</a>
+
+                            <span className="date"></span>
+                        </div>
+                        <div className="itemblock-extrainfo">
+                            <h4>
+                                <a href="base/sections/informatika/kurs_po_veb_razrabotke/">Курс по веб-разработке</a>
+
+                            </h4>
+                            <ul className="video-info">
+
+                            </ul>
+
+
+
+                        </div>
+                        <div className="lecturer-wrap">
 
                         </div>
                     </div>
-                    <div className="itemblock-title">
-
-                        <a href="base/sections/informatika/" className="rubric">Информатика</a>
-
-                        <span className="date"></span>
-                    </div>
-                    <div className="itemblock-extrainfo">
-                        <h4>
-                            <a href="base/sections/informatika/kurs_po_veb_razrabotke/">Курс по веб-разработке</a>
-
-                        </h4>
-                        <ul className="video-info">
-
-                        </ul>
-
-
-
-                    </div>
-                    <div className="lecturer-wrap">
-
-                    </div>
-                </div>
-            </section>
-     );
+                </section>
+         );
 
         return content;
     }
