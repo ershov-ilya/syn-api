@@ -149,7 +149,9 @@ var FilteredList = React.createClass({
                                 <li><a href="" data-option="0">Раздел</a></li>
                                 {
                                     this.state.filters.sections.map(function(item) {
-                                        return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
+                                        return (
+                                            <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
+                                        );
                                     })
                                 }
                             </ul>
@@ -160,7 +162,9 @@ var FilteredList = React.createClass({
                                 <li><a href="" data-option="0">Курс</a></li>
                                 {
                                     this.state.filters.course.map(function(item) {
-                                        return <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
+                                        return (
+                                            <li><a href="" data-option={item.id}>{item.pagetitle}</a></li>
+                                        );
                                     })
                                 }
                             </ul>
@@ -168,6 +172,9 @@ var FilteredList = React.createClass({
                     </div>
                 </section>
                 <p>Запрос: {JSON.stringify(this.state.query)}</p>
+                <section className="filter-content">
+                    <List />
+                </section>
             </div>
         );
     },
@@ -192,14 +199,43 @@ var FilteredList = React.createClass({
 var List = React.createClass({
     render: function(){
         return (
-            <ul>
-                {
-                    this.props.items.map(function(item) {
-                        return <li key={item}>{item}</li>
-                    })
-                }
-            </ul>
-        )
+                <section className="item-list itemblock-h clearfix ajax-page-content">
+                    <div className="itemblock">
+                        <div className="infoblock">
+
+                            <a href="base/sections/informatika/kurs_po_veb_razrabotke/">
+                                <img src="assets/upload/BZ/informatika/kurs_web_razrab/Screenshot_3.png" width="294" height="204" alt="" />
+                            </a>
+                            <div className="infoblock-panel">
+                                <a href="base/sections/informatika/kurs_po_veb_razrabotke/" className="play-icon">Видео</a>
+                                <span className="browsing-icon">51</span>
+
+                            </div>
+                        </div>
+                        <div className="itemblock-title">
+
+                            <a href="base/sections/informatika/" className="rubric">Информатика</a>
+
+                            <span className="date"></span>
+                        </div>
+                        <div className="itemblock-extrainfo">
+                            <h4>
+                                <a href="base/sections/informatika/kurs_po_veb_razrabotke/">Курс по веб-разработке</a>
+
+                            </h4>
+                            <ul className="video-info">
+
+                            </ul>
+
+
+
+                        </div>
+                        <div className="lecturer-wrap">
+
+                        </div>
+                    </div>
+                </section>
+         )
     }
 });
 
