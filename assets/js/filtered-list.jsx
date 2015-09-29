@@ -198,44 +198,46 @@ var FilteredList = React.createClass({
 
 var List = React.createClass({
     render: function(){
-        return (
-                <section className="item-list itemblock-h clearfix ajax-page-content">
-                    <div className="itemblock">
-                        <div className="infoblock">
+    var content=(
+            <section className="item-list itemblock-h clearfix ajax-page-content">
+                <div className="itemblock">
+                    <div className="infoblock">
 
-                            <a href="base/sections/informatika/kurs_po_veb_razrabotke/">
-                                <img src="assets/upload/BZ/informatika/kurs_web_razrab/Screenshot_3.png" width="294" height="204" alt="" />
-                            </a>
-                            <div className="infoblock-panel">
-                                <a href="base/sections/informatika/kurs_po_veb_razrabotke/" className="play-icon">Видео</a>
-                                <span className="browsing-icon">51</span>
-
-                            </div>
-                        </div>
-                        <div className="itemblock-title">
-
-                            <a href="base/sections/informatika/" className="rubric">Информатика</a>
-
-                            <span className="date"></span>
-                        </div>
-                        <div className="itemblock-extrainfo">
-                            <h4>
-                                <a href="base/sections/informatika/kurs_po_veb_razrabotke/">Курс по веб-разработке</a>
-
-                            </h4>
-                            <ul className="video-info">
-
-                            </ul>
-
-
-
-                        </div>
-                        <div className="lecturer-wrap">
+                        <a href="base/sections/informatika/kurs_po_veb_razrabotke/">
+                            <img src="assets/upload/BZ/informatika/kurs_web_razrab/Screenshot_3.png" width="294" height="204" alt="" />
+                        </a>
+                        <div className="infoblock-panel">
+                            <a href="base/sections/informatika/kurs_po_veb_razrabotke/" className="play-icon">Видео</a>
+                            <span className="browsing-icon">51</span>
 
                         </div>
                     </div>
-                </section>
-         )
+                    <div className="itemblock-title">
+
+                        <a href="base/sections/informatika/" className="rubric">Информатика</a>
+
+                        <span className="date"></span>
+                    </div>
+                    <div className="itemblock-extrainfo">
+                        <h4>
+                            <a href="base/sections/informatika/kurs_po_veb_razrabotke/">Курс по веб-разработке</a>
+
+                        </h4>
+                        <ul className="video-info">
+
+                        </ul>
+
+
+
+                    </div>
+                    <div className="lecturer-wrap">
+
+                    </div>
+                </div>
+            </section>
+     );
+
+        return content;
     }
 });
 
