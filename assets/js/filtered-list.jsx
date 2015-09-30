@@ -222,14 +222,19 @@ var List = React.createClass({
             console.log(this.props);
         }
         if((this.props.course==0 || typeof this.props.course == 'undefined') && (this.props.section==0 || typeof this.props.section == 'undefined')){
+            this.setState({course: 0, section: 0});
             $('#FilteredContent').fadeOut(300).html('');
         }else
-        if((this.props.course==0 || typeof this.props.course == 'undefined') && this.props.section>0){
-            $('#FilteredContent').fadeIn(300).html('<h1>NOW</h1>');
+        if((this.props.course==0 || typeof this.props.course == 'undefined') && this.props.section>0 && (this.props.section!=this.state.section || this.props.course!=this.state.course)){
+            this.setState({course: 0, section: this.props.section});
+            $('#FilteredContent').fadeOut(300);
+            $.get(this.state.url.section+'?section='+this.props.section, function(response) { //?course=9574
+//                console.log(response);
+                $('#FilteredContent').html(response).fadeIn(300);
+            }.bind(this));
         }else
         if(typeof this.props.course != 'undefined' && this.props.course>0 && this.props.course!=this.state.course){
             this.setState({course: this.props.course});
-            console.log('Ajax request for content');
             $('#FilteredContent').fadeOut(300);
             $.get(this.state.url.course+'?course='+this.props.course, function(response) { //?course=9574
 //                console.log(response);
