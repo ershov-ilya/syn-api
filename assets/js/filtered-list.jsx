@@ -48,7 +48,7 @@ var FilteredList = React.createClass({
         }
         this.setState(this.state);
 
-         $.get('http://synergy.ru/api/ajax/filter/get-sections/?course='+section.id, function(response) {
+         $.get('http://synergy.ru/api/ajax/filter/get-filter/?course='+section.id, function(response) {
             response=JSON.parse(response);
              if (this.isMounted()) {
                 if(typeof response.sections != 'undefined') this.state.filters.sections=response.sections;
@@ -118,7 +118,7 @@ var FilteredList = React.createClass({
     },
 
     componentDidMount: function() {
-         $.get('http://synergy.ru/api/ajax/filter/get-sections/', function(response) { //?course=9574
+         $.get('http://synergy.ru/api/ajax/filter/get-filter/', function(response) { //?course=9574
             response=JSON.parse(response);
             if(typeof response.sections == 'undefined') response.sections = [];
             if(typeof response.course == 'undefined') response.course = [];
@@ -198,7 +198,10 @@ var List = React.createClass({
     getInitialState: function(){
         return {
             content:'',
-            url:'http://synergy.ru/api/ajax/filter/get-course-html/',
+            url:{
+                course:'http://synergy.ru/api/ajax/filter/get-course-html/',
+                section:'http://synergy.ru/api/ajax/filter/get-section-html/'
+            },
             course:0
         }
     },
@@ -217,16 +220,20 @@ var List = React.createClass({
             console.log('>>> props:');
             console.log(this.props);
         }
+        if((this.props.course==0 || typeof this.props.course != 'undefined') && (this.props.section==0 || typeof this.props.section != 'undefined')){
+            $('#FilteredContent').fadeOut(300).html('');
+        }else
+        if((this.props.course==0 || typeof this.props.course != 'undefined') && this.props.section>0){
+            $('#FilteredContent').fadeOut(300).html('<h1>NOW</h1>');
+        }else
         if(typeof this.props.course != 'undefined' && this.props.course>0 && this.props.course!=this.state.course){
             this.setState({course: this.props.course});
             console.log('Ajax request for content');
             $('#FilteredContent').fadeOut(300);
-            $.get(this.state.url+'?course='+this.props.course, function(response) { //?course=9574
+            $.get(this.state.url.course+'?course='+this.props.course, function(response) { //?course=9574
 //                console.log(response);
                 $('#FilteredContent').html(response).fadeIn(300);
             }.bind(this));
-        }else if(this.props.course==0 && this.props.section==0){
-            $('#FilteredContent').fadeOut(300).html('');
         }
     },
 
@@ -251,34 +258,4 @@ var List = React.createClass({
 if(typeof FilteredList != 'undefined') {
     React.render(<FilteredList/>, document.getElementById('FilteredListApp'));
 }
-
-/*
-    <!-- Filter -->
-    <section class="filter clearfix">
-        <div class="filter-left">
-            <div class="themes-title">Фильтры</div>
-            <div class="drop-filter themes-filter">
-                <a href="#" class="drop-link">Раздел</a>
-                <ul>
-                    <li><a href="" data-option="0">Раздел</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="filter-right">
-            <span class="sorting-filter-title">сортировать</span>
-            <ul class="sorting-filter">
-                <li><a href="" data-option="publishedon">по дате</a></li>
-                <li><a href="" data-option="speaker">по автору</a></li>
-
-                <li><a href="" data-option="view_count">по популярности</a></li>
-            </ul>
-            <ul class="view-filter">
-                <li><a href="" class="rows current"></a></li>
-                <li><a href="" class="column"></a></li>
-            </ul>
-        </div>
-    </section>
-    <!-- /Filter -->
-
-*/
 
