@@ -169,7 +169,6 @@ var FilteredList = React.createClass({
                         </div>
                     </div>
                 </section>
-                <p>Запрос: {JSON.stringify(this.state.query)}</p>
                 <section className="filter-content">
                     <List course={this.state.query.course.id || 0} name={this.state.query.course.name || ''} />
                 </section>
