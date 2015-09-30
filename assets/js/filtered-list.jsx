@@ -202,7 +202,8 @@ var List = React.createClass({
                 course:'http://synergy.ru/api/ajax/filter/get-course-html/',
                 section:'http://synergy.ru/api/ajax/filter/get-section-html/'
             },
-            course:0
+            course:0,
+            section:0
         }
     },
 
@@ -220,11 +221,11 @@ var List = React.createClass({
             console.log('>>> props:');
             console.log(this.props);
         }
-        if((this.props.course==0 || typeof this.props.course != 'undefined') && (this.props.section==0 || typeof this.props.section != 'undefined')){
+        if((this.props.course==0 || typeof this.props.course == 'undefined') && (this.props.section==0 || typeof this.props.section == 'undefined')){
             $('#FilteredContent').fadeOut(300).html('');
         }else
-        if((this.props.course==0 || typeof this.props.course != 'undefined') && this.props.section>0){
-            $('#FilteredContent').fadeOut(300).html('<h1>NOW</h1>');
+        if((this.props.course==0 || typeof this.props.course == 'undefined') && this.props.section>0){
+            $('#FilteredContent').fadeIn(300).html('<h1>NOW</h1>');
         }else
         if(typeof this.props.course != 'undefined' && this.props.course>0 && this.props.course!=this.state.course){
             this.setState({course: this.props.course});
