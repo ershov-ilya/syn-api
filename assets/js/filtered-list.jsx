@@ -44,7 +44,7 @@ var FilteredList = React.createClass({
         this.state.query.section=section;
         if(this.state.query.section.id==0) {
             this.state.filters.course=[];
-            this.state.query.course={id:0, name:'Курс'};
+            this.state.query.course=this.state.query.default.course;
         }
         this.setState(this.state);
 
@@ -94,7 +94,17 @@ var FilteredList = React.createClass({
                 },
                 course:{
                     id:0,
-                    name:'Курс'
+                    name:'Курс не выбран'
+                },
+                default:{
+                    section:{
+                        id:0,
+                        name:'Раздел не выбран'
+                    },
+                    course:{
+                        id:0,
+                        name:'Курс не выбран'
+                    }
                 }
             }
         }
@@ -102,6 +112,9 @@ var FilteredList = React.createClass({
 
     componentWillMount: function(){ // Функция инциализации
         //this.setState({items: this.state.initialItems})
+        this.state.query.section=this.state.query.default.section;
+        this.state.query.course=this.state.query.default.course;
+        this.setState(this.state);
     },
 
     componentDidMount: function() {
@@ -144,7 +157,7 @@ var FilteredList = React.createClass({
                         <div className="drop-filter themes-filter section-filter">
                             <a href="#" className="drop-link">{this.state.query.section.name}</a>
                             <ul className="drop-list">
-                                <li><a href="" data-option="0">Раздел</a></li>
+                                <li><a href="" data-option="0">{this.state.query.default.section.name}</a></li>
                                 {
                                     this.state.filters.sections.map(function(item) {
                                         return (
@@ -157,7 +170,7 @@ var FilteredList = React.createClass({
                         <div className="drop-filter themes-filter course-filter" style={subFilterStyle}>
                             <a href="#" className="drop-link">{this.state.query.course.name}</a>
                             <ul className="drop-list">
-                                <li><a href="" data-option="0">Курс</a></li>
+                                <li><a href="" data-option="0">{this.state.query.default.course.name}</a></li>
                                 {
                                     this.state.filters.course.map(function(item) {
                                         return (
@@ -170,7 +183,7 @@ var FilteredList = React.createClass({
                     </div>
                 </section>
                 <section className="filter-content">
-                    <List course={this.state.query.course.id || 0} name={this.state.query.course.name || ''} />
+                    <List section={this.state.query.section.id || 0} course={this.state.query.course.id || 0} name={this.state.query.course.name || ''} />
                 </section>
             </div>
         );
@@ -207,10 +220,13 @@ var List = React.createClass({
         if(typeof this.props.course != 'undefined' && this.props.course>0 && this.props.course!=this.state.course){
             this.setState({course: this.props.course});
             console.log('Ajax request for content');
+            $('#FilteredContent').fadeOut(300);
             $.get(this.state.url+'?course='+this.props.course, function(response) { //?course=9574
 //                console.log(response);
-                $('#FilteredContent').fadeOut(300).html(response).fadeIn(300);
+                $('#FilteredContent').html(response).fadeIn(300);
             }.bind(this));
+        }else if(this.props.course==0 && this.props.section==0){
+            $('#FilteredContent').fadeOut(300).html('');
         }
     },
 
