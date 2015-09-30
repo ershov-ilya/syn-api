@@ -222,7 +222,7 @@ var List = React.createClass({
             console.log(this.props);
         }
         if((this.props.course==0 || typeof this.props.course == 'undefined') && (this.props.section==0 || typeof this.props.section == 'undefined')){
-            this.setState({course: 0, section: 0});
+            if(!(this.state.section==0 && this.state.course==0)) this.setState({course: 0, section: 0});
             $('#FilteredContent').fadeOut(300).html('');
         }else
         if((this.props.course==0 || typeof this.props.course == 'undefined') && this.props.section>0 && (this.props.section!=this.state.section || this.props.course!=this.state.course)){
