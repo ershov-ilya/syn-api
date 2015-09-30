@@ -17,7 +17,7 @@ if(isset($_REQUEST['t'])) define('DEBUG', true);
 defined('DEBUG') or define('DEBUG', false);
 $response=array();
 $format='json';
-$parent=9573;
+$output='';
 
 if(DEBUG){
     error_reporting(E_ALL);
@@ -36,38 +36,39 @@ require_once('../../../core/config/api.private.config.php');
 require_once(API_CORE_PATH.'/class/restful/restful.class.php');
 require_once(API_CORE_PATH.'/class/format/format.class.php');
 
+
 try {
     $user_id = $modx->user->id;
-    $rest=new RESTful('get-sections',array('course'));
 
-    $json='[]';
-    $q = $modx->newQuery('modResource');
-    $q->select('id,pagetitle,alias,uri');
-    $q->where(array('modResource.parent' => $parent));
-    if ($q->prepare() && $q->stmt->execute()) {
-        $rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
-        if(!empty($rows)) $response=array('sections'=>$rows);
-    }
+    $rest=new RESTful('get-course-html', array('section'));
+    if(empty($rest->data['section'])) die('');
 
-    if(!empty($rest->data['course'])){
-        $q = $modx->newQuery('modResource');
-        $q->select('id,pagetitle,alias,uri');
-        $q->where(array('modResource.parent' => $rest->data['course']));
-        if ($q->prepare() && $q->stmt->execute()) {
-            $rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
-            if(!empty($rows)) $response['course']=$rows;
-        }
-    }
-
-    if(DEBUG) {
-        print_r($response);
-    }
-
+    // Значения о умолчанию
+    $props = array(
+        'parents'=>$rest->data['section'],
+        'depth' => 1,
+        'tpl' => 'bz.video-list.item.tpl',
+        'where' => "template IN ('41') AND published='1'",
+        'limit' => 50,
+        "includeTVs" => 'img,speaker,view_count',
+        "processTVs" => 1,
+        'sortby' => 'menuindex',
+        'sortdir' => 'ASC',
+//        'fastMode'=>1
+    );
+    $output= $modx->runSnippet('pdoResources', $props);
+//    $modx->getParser()->processElementTags('', $output, false, false, '[[', ']]', array(), 10);
+//    $modx->getParser()->processElementTags('', $output, true, true, '[[', ']]', array(), 10);
+    print $output;
+    die;
 }
 catch(Exception $e){
     $response['message']=$e->getMessage();
     $response['code']=$e->getCode();
+    require_once(API_CORE_PATH.'/class/format/format.class.php');
+    print Format::parse($response, $format);
 }
 
-require_once(API_CORE_PATH.'/class/format/format.class.php');
-print Format::parse($response, $format);
+print $output;
+
+
