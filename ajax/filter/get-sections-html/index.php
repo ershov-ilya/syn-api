@@ -40,12 +40,12 @@ require_once(API_CORE_PATH.'/class/format/format.class.php');
 try {
     $user_id = $modx->user->id;
 
-    $rest=new RESTful('get-course-html', array('section'));
-    if(empty($rest->data['section'])) die('');
+    $rest=new RESTful('get-sections-html', array('section'));
+    //if(empty($rest->data['section'])) die('');
 
     // Значения о умолчанию
     $props = array(
-        'parents'=>$rest->data['section'],
+        'parents'=>9573,
         'depth' => 1,
         'tpl' => 'bz.video-list.item.tpl',
         'where' => "template IN ('41') AND published='1'",
