@@ -224,12 +224,14 @@ var List = React.createClass({
         if((this.props.course==0 || typeof this.props.course == 'undefined') && (this.props.section==0 || typeof this.props.section == 'undefined')){
             if(!(this.state.section==0 && this.state.course==0)) this.setState({course: 0, section: 0});
             $('#FilteredContent').fadeOut(300).html('');
-        }else
+             $.get('http://synergy.ru/api/ajax/filter/get-sections-html/', function(response) {
+                 $('#FilteredContent').html(response).fadeIn(300);
+             }.bind(this));
+       }else
         if((this.props.course==0 || typeof this.props.course == 'undefined') && this.props.section>0 && (this.props.section!=this.state.section || this.props.course!=this.state.course)){
             this.setState({course: 0, section: this.props.section});
             $('#FilteredContent').fadeOut(300);
-            $.get(this.state.url.section+'?section='+this.props.section, function(response) { //?course=9574
-//                console.log(response);
+            $.get('http://synergy.ru/api/ajax/filter/get-section-html/?section='+this.props.section, function(response) { //?course=9574
                 $('#FilteredContent').html(response).fadeIn(300);
             }.bind(this));
         }else

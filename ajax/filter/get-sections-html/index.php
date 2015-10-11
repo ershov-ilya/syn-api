@@ -46,9 +46,9 @@ try {
     // Значения о умолчанию
     $props = array(
         'parents'=>9573,
-        'depth' => 1,
-        'tpl' => 'bz.video-list.item.tpl',
-        'where' => "template IN ('41') AND published='1'",
+        'depth' => 0,
+        'tpl' => 'bz.sections.item.tpl',
+//        'where' => "template IN ('41') AND published='1'",
         'limit' => 50,
         "includeTVs" => 'img,speaker,view_count',
         "processTVs" => 1,
